@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funds.co</title>
+    <link rel="icon" type="image/png" href="iconP.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --header-bg: #0e0e0e;
+            --header-text: #ffffff;
+            --accent-purple: #7e57ff;
+            --accent-blue: #3a7bd5;
+            --nav-hover: #1a1a1a;
+            --button-bg: #7e57ff;
+            --button-hover: #0fd888;
+            --primary: #121212;
+            --secondary: #0a0a0a;
+            --text-light: #e0e0e0;
+            --text-dark: #121212;
+            --panel-bg: #1a1a1a;
+            --input-bg: #252525;
+            --border-color: #333333;
+            --accent-color: #3a7bd5;
+        }
+        
+        body {
+            background-color: var(--secondary);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav li {
+            margin: 0 10px;
+        }
+        
+        nav a {
+            color: var(--header-text);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: var(--nav-hover);
+            color: var(--accent-color);
+        }
+        
+        nav a i {
+            margin-right: 5px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .auth-btn {
+            background-color: var(--button-bg);
+            color: var(--text-dark);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .auth-btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-1px);
+        }
+        
+        #userPanel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #balanceDisplay {
+            font-weight: bold;
+            color: var(--accent-color);
+            min-width: 100px;
+            text-align: right;
+            transition: all 0.3s;
+        }
+        
+        .balance-up {
+            animation: balanceUp 0.5s ease-in-out;
+        }
+        
+        .balance-down {
+            animation: balanceDown 0.5s ease-in-out;
+        }
+        
+        @keyframes balanceUp {
+            0% { color: var(--accent-color); transform: scale(1); }
+            50% { color: #0fd888; transform: scale(1.1); }
+            100% { color: var(--accent-color); transform: scale(1); }
+        }
+        
+        @keyframes balanceDown {
+            0% { color: var(--accent-color); transform: scale(1); }
+            50% { color: #ff4d4d; transform: scale(1.1); }
+            100% { color: var(--accent-color); transform: scale(1); }
+        }
+        
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .game-area {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .control-area {
+            flex: 1;
+            min-width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .game-panel {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+        
+        .game-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .plinko-container {
+            position: relative;
+            background: var(--primary);
+            border-radius: 8px;
+            height: 600px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .peg {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        
+        .ball {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 8px rgba(20, 241, 149, 0.5);
+        }
+        
+        .bucket {
+            position: absolute;
+            bottom: 0;
+            height: 50px;
+            background: var(--panel-bg);
+            border-top: 3px solid var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 0;
+        }
+        
+        .control-panel {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+        
+        .control-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .section-title {
+            font-size: 15px;
+            color: #7d8fa1;
+            font-weight: 500;
+        }
+        
+        .input-container {
+            display: flex;
+            background: var(--input-bg);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 14px 16px;
+            font-size: 15px;
+            outline: none;
+        }
+        
+        .quick-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-btn {
+            padding: 10px 12px;
+            background: var(--input-bg);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .quick-btn:hover {
+            background: #333;
+        }
+        
+        .action-btn {
+            background: linear-gradient(to right, var(--button-bg), var(--button-hover));
+            color: var(--text-dark);
+            border: none;
+            padding: 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .multi-drop-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .multi-drop-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--input-bg);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #7d8fa1;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        .multiplier-info {
+            background: var(--input-bg);
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        
+        .multiplier-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .multiplier-label {
+            font-size: 13px;
+            color: #7d8fa1;
+        }
+        
+        .multiplier-value {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        audio {
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            margin-top: 20px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Immediate authentication check
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = '../../login.html';
+        }
+    </script>
+
+    <header>
+        <div class="logo">Funds.co</div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-trophy"></i> Sports</a></li>
+                <li><a href="#"><i class="fas fa-coins"></i> Casino</a></li>
+                <li><a href="../../games/crash/crash"><i class="fas fa-rocket"></i> Crash</a></li>
+                <li><a href="../../games/mines/mines.html"><i class="fas fa-bomb"></i> Mines</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <div id="userPanel">
+                <span id="usernameDisplay"></span>
+                <span id="balanceDisplay"></span>
+                <button id="logoutBtn" class="auth-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="game-area">
+            <div class="game-panel">
+                <h1 class="game-title">Plinko</h1>
+                <div class="plinko-container" id="plinkoBoard">
+                    <!-- Pegs and buckets will be generated by JS -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="control-area">
+            <div class="control-panel">
+                <div class="control-section">
+                    <div class="section-title">BET AMOUNT</div>
+                    <div class="input-container">
+                        <input type="number" id="betAmount" value="1.00" step="0.01" min="0.10">
+                    </div>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" data-action="add" data-amount="0.1">+0.1</button>
+                        <button class="quick-btn" data-action="add" data-amount="1">+1</button>
+                        <button class="quick-btn" data-action="add" data-amount="5">+5</button>
+                        <button class="quick-btn" data-action="multiply" data-amount="0.5">1/2</button>
+                        <button class="quick-btn" data-action="multiply" data-amount="2">2x</button>
+                        <button class="quick-btn" data-action="max">MAX</button>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <div class="section-title">ROWS</div>
+                    <div class="input-container">
+                        <input type="number" id="rowCount" value="16" min="16" max="16" step="1" readonly>
+                    </div>
+                    <div class="multiplier-info" id="multiplierInfo">
+                        <div class="multiplier-row">
+                            <span class="multiplier-label">Multipliers:</span>
+                            <span class="multiplier-value" id="multiplierRange">0.5x - 16x</span>
+                        </div>
+                        <div class="multiplier-row">
+                            <span class="multiplier-label">Destinations:</span>
+                            <span class="multiplier-value" id="destinationsCount">17</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="action-btn" id="dropBall">DROP BALL</button>
+                
+                <div class="multi-drop-controls">
+                    <button class="multi-drop-btn" id="drop3Balls">DROP 3</button>
+                    <button class="multi-drop-btn" id="drop5Balls">DROP 5</button>
+                    <button class="multi-drop-btn" id="drop10Balls">DROP 10</button>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-label">Profit</div>
+                        <div class="stat-value" id="profitValue">$0.00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Wins</div>
+                        <div class="stat-value" id="winsValue">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Losses</div>
+                        <div class="stat-value" id="lossesValue">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>⚠️ This is a demo site only. No real money is used or won.</p>
+    </footer>
+
+    <audio id="dropSound" preload="auto">
+      <source src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hitSound" preload="auto">
+      <source src="https://assets.mixkit.co/sfx/preview/mixkit-quick-jump-arcade-game-239.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="winSound" preload="auto">
+      <source src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Physics constants
+        const GRAVITY = 0.8;
+        const BOUNCE_FACTOR = 0.7;
+        const FRICTION = 0.80;
+        const PEG_BOUNCE = 0.8;
+        const SOUND_VOLUME = 0.5;
+        const CENTER_BIAS = 0.8;
+        
+        // Fixed multiplier sequence (16 rows = 17 buckets)
+        const FIXED_MULTIPLIERS = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
+        
+        // Game elements
+        const board = document.getElementById('plinkoBoard');
+        const dropBtn = document.getElementById('dropBall');
+        const drop3Btn = document.getElementById('drop3Balls');
+        const drop5Btn = document.getElementById('drop5Balls');
+        const drop10Btn = document.getElementById('drop10Balls');
+        const betInput = document.getElementById('betAmount');
+        const rowInput = document.getElementById('rowCount');
+        const profitValue = document.getElementById('profitValue');
+        const winsValue = document.getElementById('winsValue');
+        const lossesValue = document.getElementById('lossesValue');
+        const multiplierRange = document.getElementById('multiplierRange');
+        const destinationsCount = document.getElementById('destinationsCount');
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const quickBtns = document.querySelectorAll('.quick-btn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Game state
+        let gameState = {
+            rows: 16,
+            betAmount: 1.00,
+            profit: 0,
+            wins: 0,
+            losses: 0,
+            pegs: [],
+            buckets: [],
+            balls: [],
+            ballCounter: 0,
+            animationId: null,
+            currentMultipliers: [...FIXED_MULTIPLIERS],
+            balance: parseFloat(localStorage.getItem('plinkoBalance')) || 1000.00
+        };
+        
+        // Format currency
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2);
+        }
+        
+        // Update balance display and save to localStorage
+        function updateBalanceDisplay() {
+            balanceDisplay.textContent = formatCurrency(gameState.balance);
+            localStorage.setItem('plinkoBalance', gameState.balance.toString());
+            
+            // Add animation class if balance changed
+            if (gameState.balance > parseFloat(localStorage.getItem('previousBalance') || 0)) {
+                balanceDisplay.classList.add('balance-up');
+                setTimeout(() => balanceDisplay.classList.remove('balance-up'), 500);
+            } else if (gameState.balance < parseFloat(localStorage.getItem('previousBalance') || 0)) {
+                balanceDisplay.classList.add('balance-down');
+                setTimeout(() => balanceDisplay.classList.remove('balance-down'), 500);
+            }
+            localStorage.setItem('previousBalance', gameState.balance.toString());
+        }
+        
+        // Sound functions
+        function playDropSound() {
+            const sound = document.getElementById('dropSound');
+            sound.volume = SOUND_VOLUME;
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        function playHitSound() {
+            const sound = document.getElementById('hitSound');
+            sound.volume = SOUND_VOLUME;
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        function playWinSound() {
+            const sound = document.getElementById('winSound');
+            sound.volume = SOUND_VOLUME;
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        // Initialize the board
+        function initBoard() {
+            board.innerHTML = '';
+            gameState.pegs = [];
+            gameState.buckets = [];
+            
+            const rows = parseInt(rowInput.value);
+            gameState.rows = rows;
+            const boardWidth = board.clientWidth;
+            const boardHeight = board.clientHeight;
+            const pegSpacing = boardWidth / (rows + 1);
+            const rowSpacing = (boardHeight - 80) / rows;
+            
+            // Create pegs
+            for (let row = 0; row < rows; row++) {
+                const pegsInRow = row + 1;
+                for (let peg = 0; peg < pegsInRow; peg++) {
+                    const pegEl = document.createElement('div');
+                    pegEl.className = 'peg';
+                    const x = (boardWidth/2) - (pegsInRow * pegSpacing)/2 + peg * pegSpacing;
+                    const y = 40 + row * rowSpacing;
+                    pegEl.style.left = `${x}px`;
+                    pegEl.style.top = `${y}px`;
+                    board.appendChild(pegEl);
+                    
+                    gameState.pegs.push({
+                        x: x,
+                        y: y,
+                        radius: 6,
+                        element: pegEl
+                    });
+                }
+            }
+            
+            // Create buckets
+            const bucketCount = FIXED_MULTIPLIERS.length;
+            const bucketWidth = boardWidth / bucketCount;
+            for (let i = 0; i < bucketCount; i++) {
+                const bucketEl = document.createElement('div');
+                bucketEl.className = 'bucket';
+                const x = i * bucketWidth;
+                bucketEl.style.left = `${x}px`;
+                bucketEl.style.width = `${bucketWidth}px`;
+                
+                const multiplier = FIXED_MULTIPLIERS[i];
+                bucketEl.textContent = `${multiplier}x`;
+                bucketEl.dataset.multiplier = multiplier;
+                board.appendChild(bucketEl);
+                
+                gameState.buckets.push({
+                    x: x,
+                    width: bucketWidth,
+                    multiplier: multiplier,
+                    element: bucketEl
+                });
+            }
+            
+            updateMultiplierInfo();
+        }
+        
+        // Update multiplier info
+        function updateMultiplierInfo() {
+            const minMult = Math.min(...FIXED_MULTIPLIERS);
+            const maxMult = Math.max(...FIXED_MULTIPLIERS);
+            multiplierRange.textContent = `${minMult}x - ${maxMult}x`;
+            destinationsCount.textContent = FIXED_MULTIPLIERS.length;
+        }
+        
+        // Create a new ball
+        function createBall() {
+            const ball = document.createElement('div');
+            ball.className = 'ball';
+            ball.id = `ball-${gameState.ballCounter++}`;
+            board.appendChild(ball);
+            return ball;
+        }
+        
+        // Reset ball state with center bias
+        function resetBall(ball) {
+            let randomX = (Math.random() - 0.5) * 2;
+            randomX = randomX * (1 - CENTER_BIAS);
+            
+            return {
+                x: board.clientWidth / 2,
+                y: 30,
+                vx: randomX,
+                vy: 0,
+                radius: 9,
+                element: ball,
+                id: ball.id
+            };
+        }
+        
+        // Check collision between ball and pegs
+        function checkPegCollision(ball) {
+            for (const peg of gameState.pegs) {
+                const dx = ball.x - peg.x;
+                const dy = ball.y - peg.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < ball.radius + peg.radius) {
+                    const angle = Math.atan2(dy, dx);
+                    const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+                    
+                    let centerPull = 0;
+                    if (ball.x < board.clientWidth / 2) {
+                        centerPull = CENTER_BIAS * 0.1;
+                    } else {
+                        centerPull = -CENTER_BIAS * 0.1;
+                    }
+                    
+                    ball.vx = Math.cos(angle) * speed * PEG_BOUNCE + centerPull;
+                    ball.vy = Math.sin(angle) * speed * PEG_BOUNCE;
+                    
+                    const overlap = ball.radius + peg.radius - distance;
+                    ball.x += Math.cos(angle) * overlap * 1.1;
+                    ball.y += Math.sin(angle) * overlap * 1.1;
+                    
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // Check if ball landed in a bucket
+        function checkBucketCollision(ball) {
+            if (ball.y + ball.radius < board.clientHeight - 50) {
+                return false;
+            }
+            
+            for (const bucket of gameState.buckets) {
+                if (ball.x >= bucket.x && ball.x <= bucket.x + bucket.width) {
+                    playHitSound();
+                    
+                    const winAmount = gameState.betAmount * bucket.multiplier;
+                    const netChange = winAmount - gameState.betAmount;
+                    gameState.profit += netChange;
+                    gameState.balance += winAmount;
+                    updateBalanceDisplay();
+                    
+                    if (winAmount > gameState.betAmount) {
+                        gameState.wins++;
+                        playWinSound();
+                    } else {
+                        gameState.losses++;
+                    }
+                    
+                    profitValue.textContent = formatCurrency(gameState.profit);
+                    winsValue.textContent = gameState.wins;
+                    lossesValue.textContent = gameState.losses;
+                    
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // Update ball physics
+        function updateBall(ball) {
+            ball.vy += GRAVITY;
+            
+            const centerDist = (ball.x - board.clientWidth / 2) / (board.clientWidth / 2);
+            ball.vx -= centerDist * CENTER_BIAS * 0.05;
+            
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+            
+            checkPegCollision(ball);
+            
+            if (ball.x - ball.radius < 0) {
+                ball.x = ball.radius;
+                ball.vx *= -BOUNCE_FACTOR;
+            }
+            if (ball.x + ball.radius > board.clientWidth) {
+                ball.x = board.clientWidth - ball.radius;
+                ball.vx *= -BOUNCE_FACTOR;
+            }
+            
+            ball.vx *= FRICTION;
+            ball.vy *= FRICTION;
+            
+            ball.element.style.left = `${ball.x - ball.radius}px`;
+            ball.element.style.top = `${ball.y - ball.radius}px`;
+            
+            if (checkBucketCollision(ball)) {
+                setTimeout(() => {
+                    ball.element.remove();
+                    gameState.balls = gameState.balls.filter(b => b.id !== ball.id);
+                }, 500);
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Animation loop
+        function animate() {
+            gameState.balls = gameState.balls.filter(updateBall);
+            
+            if (gameState.balls.length > 0) {
+                gameState.animationId = requestAnimationFrame(animate);
+            } else {
+                cancelAnimationFrame(gameState.animationId);
+                gameState.animationId = null;
+            }
+        }
+        
+        // Drop a single ball
+        function dropBall() {
+            if (gameState.balance < gameState.betAmount) {
+                alert("Insufficient balance!");
+                return;
+            }
+            
+            gameState.balance -= gameState.betAmount;
+            updateBalanceDisplay();
+            
+            const ball = createBall();
+            const ballState = resetBall(ball);
+            gameState.balls.push(ballState);
+            
+            playDropSound();
+            
+            if (!gameState.animationId) {
+                animate();
+            }
+        }
+        
+        // Drop multiple balls
+        function dropBalls(count) {
+            if (gameState.balance < gameState.betAmount * count) {
+                alert("Insufficient balance!");
+                return;
+            }
+            
+            gameState.balance -= gameState.betAmount * count;
+            updateBalanceDisplay();
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const ball = createBall();
+                    const ballState = resetBall(ball);
+                    gameState.balls.push(ballState);
+                    
+                    playDropSound();
+                    
+                    if (!gameState.animationId) {
+                        animate();
+                    }
+                }, i * 200);
+            }
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                window.location.href = '../../login.html';
+                return;
+            }
+            
+            // Set user info
+            document.getElementById('usernameDisplay').textContent = localStorage.getItem('username') || 'Player';
+            updateBalanceDisplay();
+            
+            // Initialize game board
+            initBoard();
+            
+            // Event listeners
+            dropBtn.addEventListener('click', dropBall);
+            drop3Btn.addEventListener('click', () => dropBalls(3));
+            drop5Btn.addEventListener('click', () => dropBalls(5));
+            drop10Btn.addEventListener('click', () => dropBalls(10));
+            
+            // Quick bet buttons
+            quickBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    let currentBet = parseFloat(betInput.value);
+                    const action = this.dataset.action;
+                    const amount = parseFloat(this.dataset.amount);
+                    
+                    if (action === 'add') {
+                        currentBet += amount;
+                    } else if (action === 'multiply') {
+                        currentBet *= amount;
+                    } else if (action === 'max') {
+                        currentBet = 100;
+                    }
+                    
+                    currentBet = Math.max(0.1, Math.min(currentBet, 100));
+                    betInput.value = currentBet.toFixed(2);
+                    gameState.betAmount = currentBet;
+                });
+            });
+            
+            // Bet amount input
+            betInput.addEventListener('change', function() {
+                let value = parseFloat(this.value);
+                value = Math.max(0.1, Math.min(value, 100));
+                this.value = value.toFixed(2);
+                gameState.betAmount = value;
+            });
+            
+            // Logout functionality
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('username');
+                localStorage.removeItem('plinkoBalance');
+                localStorage.removeItem('previousBalance');
+                window.location.href = '../../login.html';
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', initBoard);
+        });
+    </script>
+</body>
+</html>

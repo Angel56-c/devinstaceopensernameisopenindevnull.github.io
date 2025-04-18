@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Banned</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #000;
+      color: red;
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      animation: flicker 2s infinite;
+    }
+
+    h1 {
+      font-size: 4rem;
+      text-shadow: 0 0 10px red, 0 0 20px red;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      color: #ff4d4d;
+    }
+
+    .userid {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #ff9999;
+      background: #1a0000;
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px red;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      45% { opacity: 0.6; }
+      50% { opacity: 0.3; }
+      55% { opacity: 0.6; }
+      60% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>You Have Been Banned</h1>
+  <p>Access to this site has been permanently revoked.</p>
+  <div class="userid" id="userIdDisplay">USER ID: </div>
+
+  <script>
+    function generateRandomID(length) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    const userId = generateRandomID(17);
+    document.getElementById('userIdDisplay').textContent = `USER ID: ${userId}`;
+  </script>
+</body>
+</html>

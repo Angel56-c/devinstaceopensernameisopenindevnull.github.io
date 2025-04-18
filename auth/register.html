@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stake.us | Register</title>
+    <style>
+        :root {
+            --primary-blue: #0a1a2f;
+            --secondary-blue: #152642;
+            --accent-blue: #1e3a8a;
+            --highlight-blue: #3b82f6;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(30, 58, 138, 0.15) 0%, transparent 20%);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .card {
+            background-color: var(--secondary-blue);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(15, 23, 42, 0.5);
+            color: var(--text-light);
+            font-size: 0.9375rem;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--highlight-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: none;
+            background-color: var(--highlight-blue);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+        
+        button:hover {
+            background-color: #2563eb;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .login-link a {
+            color: var(--highlight-blue);
+            text-decoration: none;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(34, 197, 94, 0.1);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+        
+        .terms {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .terms a {
+            color: var(--highlight-blue);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://stake.us/static/media/logo.5d7a9b7f.svg" alt="Stake.us Logo">
+        </div>
+        
+        <div class="card">
+            <div id="successMessage" class="success-message">
+                Account created successfully! Redirecting to login...
+            </div>
+            
+            <h1>Create your account</h1>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                
+                <button type="submit">Create Account</button>
+            </form>
+            
+            <div class="login-link">
+                Already have an account? <a href="login.html">Log in</a>
+            </div>
+            
+            <div class="terms">
+                By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Here you would normally send the data to your server
+            // For this example, we'll just simulate a successful registration
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Hide the form
+            document.getElementById('registerForm').style.display = 'none';
+            
+            // Redirect to login page after 3 seconds
+            setTimeout(function() {
+                window.location.href = 'login.html';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

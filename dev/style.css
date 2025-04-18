@@ -1,0 +1,199 @@
+  :root {
+    --stake-dark: #0e0e0e;
+    --stake-green: #0031b3;
+    --stake-light-green: #0031b3;
+    --stake-gray: #1a1a1a;
+    --stake-text: #e0e0e0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    background: var(--stake-dark);
+    color: var(--stake-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .stake-container {
+    background: var(--stake-gray);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgb(0, 49, 179, 0.15);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid rgb(0, 45, 179, 0.1);
+  }
+
+  .stake-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .stake-header .logo {
+    height: 40px;
+    margin-bottom: 1rem;
+  }
+
+  .stake-header h1 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stake-header p {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+
+  .stake-form .input-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .stake-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ccc;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .stake-form label i {
+    margin-right: 8px;
+    color: var(--stake-green);
+  }
+
+  .stake-form input {
+    width: 100%;
+    padding: 12px 15px;
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: white;
+    font-size: 15px;
+    transition: all 0.3s;
+  }
+
+  .stake-form input:focus {
+    border-color: var(--stake-green);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 180, 90, 0.2);
+  }
+
+  .password-wrapper {
+    position: relative;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #777;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .toggle-password:hover {
+    color: var(--stake-text);
+  }
+
+  .stake-login-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--stake-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+  }
+
+  .stake-login-btn:hover {
+    background: var(--stake-light-green);
+  }
+
+  .stake-login-btn i {
+    margin-right: 8px;
+  }
+
+  .stake-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    font-size: 14px;
+  }
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #aaa;
+    cursor: pointer;
+  }
+
+  .forgot-link {
+    color: var(--stake-green);
+    text-decoration: none;
+  }
+
+  .forgot-link:hover {
+    text-decoration: underline;
+  }
+
+  .stake-error {
+    color: #ff4d4d;
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    background: rgba(255, 77, 77, 0.1);
+    border-radius: 4px;
+  }
+
+  .stake-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+  }
+
+  .stake-footer a {
+    color: var(--stake-green);
+    text-decoration: none;
+  }
+
+  .stake-footer a:hover {
+    text-decoration: underline;
+  }
+
+  .stake-socials {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 1rem;
+  }
+
+  .stake-socials a {
+    color: #777;
+    font-size: 18px;
+    transition: color 0.3s;
+  }
+
+  .stake-socials a:hover {
+    color: var(--stake-green);
+  }

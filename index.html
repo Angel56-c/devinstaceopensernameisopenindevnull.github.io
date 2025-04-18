@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funds.co</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        // Check if user is logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in (using localStorage as example)
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (!isLoggedIn) {
+                // Redirect to login page
+                window.location.href = 'auth/login.html';
+            }
+            
+            // If logged in, show user panel
+            if (isLoggedIn) {
+                document.getElementById('userPanel').style.display = 'flex';
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('registerBtn').style.display = 'none';
+                
+                // Display username if available
+                const username = localStorage.getItem('username');
+                if (username) {
+                    document.getElementById('usernameDisplay').textContent = username;
+                }
+
+                // Display balance if available
+                const balance = localStorage.getItem('balance') || '50000';
+                document.getElementById('balanceDisplay').textContent = '$' + balance;
+            }
+        });
+    </script>
+
+    <header>
+        <div class="logo">Funds.co</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="games/sportsbook.html"><i class="fas fa-trophy"></i> Sports</a></li>
+                <li><a href="casino/casino.html"><i class="fas fa-coins"></i> Casino</a></li>
+                <li><a href="games/crash/crash.html"><i class="fas fa-rocket"></i> Crash</a></li>
+                <li><a href="games/mines/mines.html"><i class="fas fa-bomb"></i> Mines</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button id="loginBtn" class="auth-btn">Login</button>
+            <button id="registerBtn" class="auth-btn">Register</button>
+            <div id="userPanel" style="display:none;">
+                <span id="usernameDisplay"></span>
+                <span id="balanceDisplay"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Funds.co</h1>
+            <p>Play the most exciting games with virtual currency</p>
+        </section>
+
+        <section class="featured-games">
+            <h2 class="section-title">Featured Games</h2>
+            <div class="games-grid">
+                <div class="game-card crash" onclick="location.href='games/crash/crash.html'">
+                    <div class="game-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Crash</h3>
+                    <p>Bet on the rocket's multiplier before it crashes</p>
+                </div>
+                <div class="game-card mines" onclick="location.href='../games/mines/mines.html'">
+                    <div class="game-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Mines</h3>
+                    <p>Find gems while avoiding explosive mines</p>
+                </div>
+                <div class="game-card slots" onclick="location.href='../../games/plinko/index.html'">
+                    <div class="game-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Plinko</h3>
+                    <p>Drop VC Balls Into Multi-plyers To X Your Money</p>
+                </div>
+                <div class="game-card sports" onclick="location.href='../../games/coin-flip/coin.html'">
+                    <div class="game-icon">
+                        <i class="fa-brands fa-bitcoin"></i>
+                    </div>
+                    <h3>Coin Flip</h3>
+                    <p>Flip A Coin. Once... Or Twice</p>
+                </div>
+                <!-- New game cards added below -->
+                <div class="game-card roulette" onclick="location.href='games/roulette/roulette.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3>Soon!</h3>
+                    <p>Comeing Soon!</p>
+                </div>
+                <div class="game-card blackjack" onclick="location.href='games/slowroads/index.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+                    <h3>Slow Roads!</h3>
+                    <p>A Driveing Game</p>
+                </div>
+                <div class="game-card dice" onclick="location.href='games/funds/public/index.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-jet-fighter-up"></i>
+                    </div>
+                    <h3>Funds FPS</h3>
+                    <p>FPS Game | MULTIPLAYER</p>
+                </div>
+                <div class="game-card limbo" onclick="location.href='games/hol/hol.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                    </div>
+                    <h3>Higher Or Lower</h3>
+                    <p>Will The Number Be Higher Or Lower? Place Your Bets!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>⚠️ This is a demo site only. No real money is used or won. | THIS PROJECT IS STILL IN ALPHA TESTING</p>
+    </footer>
+
+    <!-- Update Popup -->
+    <div id="updatePopup">
+        <div class="update-popup-content">
+            <div class="update-header">
+                <span class="update-badge">UPDATES & HOT FIXES</span>
+                <button id="closeUpdatePopup">&times;</button>
+            </div>
+            <div class="update-body">
+                <p>Blance Tracking (Your Balance Will Track Across Pages)<p>
+                <p>Added More Game Slots On "Featured Games" On Main Page</p>
+                <p>Must Login/Register To Pla</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOLPROOF SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show popup after 1 second
+            setTimeout(showPopup, 1000);
+
+            // Close button functionality
+            document.getElementById('closeUpdatePopup').addEventListener('click', hidePopup);
+
+            // Close when clicking outside
+            document.getElementById('updatePopup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hidePopup();
+                }
+            });
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('isLoggedIn');
+                localStorge.removeItem('isNotLoggedIn')
+                localStorage.removeItem('username');
+                localStorage.removeItem('balance');
+                tab.location.href = '../auth/login.html';
+            });
+        });
+
+        function showPopup() {
+            document.getElementById('updatePopup').classList.add('active');
+        }
+
+        function hidePopup() {
+            document.getElementById('updatePopup').classList.remove('active');
+        }
+        });
+        
+    </script>
+</body>
+</html>

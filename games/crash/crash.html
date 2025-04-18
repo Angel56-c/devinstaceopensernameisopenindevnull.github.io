@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Casino | Aviator Crash</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Your main casino CSS -->
+    <style>
+        /* Aviator-specific styles */
+        .aviator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0e17;
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1a2a3a;
+        }
+        
+        .game-title {
+            font-size: 24px;
+            color: #ffd700;
+        }
+        
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .balance {
+            font-size: 18px;
+            background: #1a2a3a;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        .cash-out-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .cash-out-btn:hover {
+            background: #c0392b;
+        }
+        
+        .game-area {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .game-canvas {
+            flex: 2;
+            background: #0d1520;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .bet-panel {
+            flex: 1;
+            background: #1a2a3a;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 500px;
+            display: block;
+        }
+        
+        /* Bet controls */
+        .bet-controls {
+            margin-bottom: 20px;
+        }
+        
+        .bet-amount {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #0d1520;
+            border: 1px solid #2a3a4a;
+            color: white;
+            border-radius: 5px;
+        }
+        
+        .bet-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .bet-btn {
+            background: #2a3a4a;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .bet-btn:hover {
+            background: #3a4a5a;
+        }
+        
+        .place-bet {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .place-bet:hover {
+            background: #2ecc71;
+        }
+        
+        .history {
+            margin-top: 20px;
+        }
+        
+        .history-title {
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        .history-items {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .history-item {
+            background: #0d1520;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        
+        .win {
+            color: #2ecc71;
+        }
+        
+        .lose {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your casino header/navigation -->
+    <header class="casino-header">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/games">Games</a>
+            <a href="/account">Account</a>
+        </nav>
+    </header>
+    
+    <main class="aviator-container">
+        <div class="game-header">
+            <h1 class="game-title">Aviator Crash</h1>
+            <div class="user-panel">
+                <div class="balance">Balance: $<span id="userBalance">1000.00</span></div>
+                <button class="cash-out-btn" id="cashOutBtn" disabled>Cash Out (1.00x)</button>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-canvas">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+            
+            <div class="bet-panel">
+                <div class="bet-controls">
+                    <input type="number" class="bet-amount" id="betAmount" value="10.00" min="1" step="0.01">
+                    <div class="bet-buttons">
+                        <button class="bet-btn" data-multiply="0.5">1/2</button>
+                        <button class="bet-btn" data-multiply="2">2x</button>
+                        <button class="bet-btn" data-multiply="max">Max</button>
+                    </div>
+                    <button class="place-bet" id="placeBetBtn">Place Bet</button>
+                </div>
+                
+                <div class="auto-cashout">
+                    <label for="autoCashout">Auto Cashout:</label>
+                    <input type="number" id="autoCashout" value="2.00" min="1.01" step="0.01">
+                </div>
+                
+                <div class="history">
+                    <h3 class="history-title">Recent Multipliers</h3>
+                    <div class="history-items" id="historyItems">
+                        <!-- History will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Game scripts -->
+    <script src="/aviator/js/game.js"></script>
+    <script src="/aviator/js/main.js"></script>
+</body>
+</html>

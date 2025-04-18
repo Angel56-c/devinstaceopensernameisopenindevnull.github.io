@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funds.co</title>
+    <link rel="icon" type="image/png" href="iconM.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2d2d3a;
+            --secondary: #1e1e2a;
+            --accent: #6c5ce7;
+            --accent-purple: #7e57ff;
+            --accent-blue: #3a7bd5;
+            --text: #ffffff;
+            --text-secondary: #b2b2bf;
+            --success: #00b894;
+            --danger: #d63031;
+            --tile-default: #6c5ce7;
+            --tile-revealed: #1e1e2a;
+            --tile-mine: #d63031;
+            --tile-diamond: #00b894;
+            --header-bg: #1a1a24;
+            --nav-hover: #6c5ce7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: var(--nav-hover);
+            color: white;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .auth-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #userPanel {
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #balanceDisplay {
+            font-weight: bold;
+            color: var(--success);
+        }
+        
+        #addFundsBtn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .login-message {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary);
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 500px;
+            display: none;
+        }
+        
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+            min-height: calc(100vh - 120px);
+        }
+        
+        .game-container {
+            background-color: var(--primary);
+            border-radius: 12px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mode-selector {
+            display: flex;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .mode-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+        }
+        
+        .mode-option.active {
+            background-color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .input-group {
+            margin-bottom: 16px;
+        }
+        
+        .amount-control {
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+        
+        .amount-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 16px;
+            padding: 8px 0;
+        }
+        
+        .multiplier-selector {
+            display: flex;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        
+        .multiplier-option {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+        }
+        
+        .multiplier-option.active {
+            background-color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .mines-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .play-button {
+            width: 100%;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .tile {
+            aspect-ratio: 1;
+            background-color: var(--tile-default);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tile.revealed {
+            background-color: var(--tile-revealed);
+            cursor: default;
+        }
+        
+        .tile.mine {
+            background-color: var(--tile-mine);
+        }
+        
+        .tile.diamond {
+            background-color: var(--tile-diamond);
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: var(--secondary);
+            border-radius: 8px;
+        }
+        
+        .cashout-button {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--header-bg);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Immediate authentication check
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = '../../auth/login.html';
+        }
+    </script>
+
+    <header>
+        <div class="logo">Funds.co</div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="games/sportsbook.html"><i class="fas fa-trophy"></i> Sports</a></li>
+                <li><a href="../../casino/casino.html"><i class="fas fa-coins"></i> Casino</a></li>
+                <li><a href="../crash/crash.html"><i class="fas fa-rocket"></i> Crash</a></li>
+                <li><a href="../mines/mines.html" class="active"><i class="fas fa-bomb"></i> Mines</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button id="loginBtn" class="auth-btn">Login</button>
+            <button id="registerBtn" class="auth-btn">Register</button>
+            <div id="userPanel">
+                <span id="usernameDisplay"></span>
+                <span id="balanceDisplay"></span>
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="game-container">
+            <div class="mode-selector">
+                <div class="mode-option active">Manual</div>
+                <div class="mode-option">Auto</div>
+            </div>
+            
+            <div class="input-group">
+                <label>Amount</label>
+                <div class="amount-control">
+                    <input type="number" class="amount-input" value="100.00" id="betAmount">
+                    <span>$</span>
+                </div>
+            </div>
+            
+            <div class="multiplier-selector">
+                <div class="multiplier-option">1×</div>
+                <div class="multiplier-option active">2×</div>
+                <div class="multiplier-option">5×</div>
+                <div class="multiplier-option">10×</div>
+            </div>
+            
+            <div class="input-group">
+                <label>Mines</label>
+                <div class="mines-control">
+                    <div class="mines-value">3</div>
+                    <div>✓</div>
+                </div>
+            </div>
+            
+            <button class="play-button" id="playButton">Play</button>
+            
+            <div class="game-board" id="gameBoard" style="display: none;"></div>
+            
+            <div class="game-info" id="gameInfo" style="display: none;">
+                <div>
+                    <div>Current Multiplier</div>
+                    <div class="current-multiplier">1.00×</div>
+                </div>
+                <button class="cashout-button" id="cashoutButton">Cashout</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>⚠️ This is a demo site only. No real money is used or won.</p>
+    </footer>
+
+    <script>
+        // Check authentication status
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        
+        if (!isLoggedIn) {
+            document.querySelector('.game-container').style.display = 'none';
+            document.getElementById('playButton').disabled = true;
+            window.location.href = '../../auth/login.html';
+        } else {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('registerBtn').style.display = 'none';
+            document.getElementById('userPanel').style.display = 'flex';
+            document.getElementById('usernameDisplay').textContent = localStorage.getItem('username') || 'Player';
+        }
+
+        // Update balance in both localStorage and admin panel
+        function updateBalance(newBalance) {
+            // Update game storage
+            gameState.balance = newBalance;
+            localStorage.setItem('balance', newBalance.toString());
+            
+            // Update admin panel storage
+            const APP_DATA_KEY = 'fundsAppData_v3';
+            const currentData = JSON.parse(localStorage.getItem(APP_DATA_KEY));
+            if (currentData && currentData.users) {
+                const username = localStorage.getItem('username');
+                const user = currentData.users.find(u => u.username === username);
+                if (user) {
+                    user.balance = newBalance;
+                    user.lastActive = new Date().toISOString();
+                    localStorage.setItem(APP_DATA_KEY, JSON.stringify(currentData));
+                    localStorage.setItem('fundsBalanceUpdateTrigger', Date.now().toString());
+                }
+            }
+            
+            // Update display
+            balanceDisplay.textContent = `$${newBalance.toFixed(2)}`;
+        }
+
+        // Game state with localStorage integration
+        const gameState = {
+            board: [],
+            mines: 3,
+            revealed: 0,
+            gameActive: false,
+            currentMultiplier: 1.0,
+            currentBet: 0,
+            balance: parseFloat(localStorage.getItem('balance')) || 10000.00,
+            revealedTiles: new Set()
+        };
+        
+        // DOM elements
+        const playButton = document.getElementById('playButton');
+        const gameBoard = document.getElementById('gameBoard');
+        const gameInfo = document.getElementById('gameInfo');
+        const cashoutButton = document.getElementById('cashoutButton');
+        const currentMultiplierDisplay = document.querySelector('.current-multiplier');
+        const betAmount = document.getElementById('betAmount');
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        
+        // Initialize balance display
+        updateBalance(gameState.balance);
+        
+        // Initialize game board
+        function initializeBoard() {
+            gameBoard.innerHTML = '';
+            gameBoard.style.display = 'grid';
+            gameInfo.style.display = 'flex';
+            
+            // Reset revealed tiles
+            gameState.revealedTiles.clear();
+            
+            // Create 5x5 board
+            for (let i = 0; i < 25; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.dataset.index = i;
+                tile.addEventListener('click', () => revealTile(i));
+                gameBoard.appendChild(tile);
+            }
+            
+            // Reset game state
+            gameState.board = Array(25).fill(0);
+            gameState.revealed = 0;
+            gameState.gameActive = true;
+            gameState.currentMultiplier = 1.0;
+            currentMultiplierDisplay.textContent = '1.00×';
+            
+            // Place mines randomly
+            let minesPlaced = 0;
+            while (minesPlaced < gameState.mines) {
+                const randomIndex = Math.floor(Math.random() * 25);
+                if (gameState.board[randomIndex] === 0) {
+                    gameState.board[randomIndex] = 1;
+                    minesPlaced++;
+                }
+            }
+        }
+        
+        // Start game
+        function startGame() {
+            const bet = parseFloat(betAmount.value);
+            if (isNaN(bet) || bet <= 0) {
+                alert("Please enter a valid bet amount");
+                return;
+            }
+            
+            if (bet > gameState.balance) {
+                alert("Insufficient balance");
+                return;
+            }
+            
+            gameState.currentBet = bet;
+            const newBalance = gameState.balance - bet;
+            updateBalance(newBalance);
+            initializeBoard();
+        }
+        
+        // Reveal tile
+        function revealTile(index) {
+            if (!gameState.gameActive || gameState.revealedTiles.has(index)) {
+                return;
+            }
+            
+            gameState.revealedTiles.add(index);
+            
+            const tile = gameBoard.children[index];
+            tile.classList.add('revealed');
+            tile.style.cursor = 'default';
+            tile.removeEventListener('click', () => revealTile(index));
+            
+            if (gameState.board[index] === 1) {
+                // Mine hit - lose bet
+                tile.classList.add('mine');
+                tile.textContent = '💣';
+                endGame(false);
+            } else {
+                // Safe tile
+                tile.classList.add('diamond');
+                tile.textContent = '💎';
+                gameState.revealed++;
+                gameState.currentMultiplier += 0.25;
+                currentMultiplierDisplay.textContent = gameState.currentMultiplier.toFixed(2) + '×';
+                
+                if (gameState.revealed === (25 - gameState.mines)) {
+                    // Win - add winnings
+                    const winnings = gameState.currentBet * gameState.currentMultiplier;
+                    const newBalance = gameState.balance + winnings;
+                    updateBalance(newBalance);
+                    endGame(true);
+                    alert(`You won! Multiplier: ${gameState.currentMultiplier.toFixed(2)}× Payout: $${winnings.toFixed(2)}`);
+                }
+            }
+        }
+        
+        // End game
+        function endGame(win) {
+            gameState.gameActive = false;
+            
+            if (!win) {
+                // Reveal all mines when game ends
+                for (let i = 0; i < gameState.board.length; i++) {
+                    if (gameState.board[i] === 1 && !gameState.revealedTiles.has(i)) {
+                        const tile = gameBoard.children[i];
+                        tile.classList.add('revealed', 'mine');
+                        tile.textContent = '💣';
+                    }
+                }
+                alert("You hit a mine! Lost your bet.");
+            }
+        }
+        
+        // Cashout
+        function cashout() {
+            if (gameState.gameActive) {
+                const winnings = gameState.currentBet * gameState.currentMultiplier;
+                const newBalance = gameState.balance + winnings;
+                updateBalance(newBalance);
+                endGame(true);
+                alert(`Cashed out at ${gameState.currentMultiplier.toFixed(2)}×! Won $${winnings.toFixed(2)}`);
+            }
+        }
+        
+        // Event listeners
+        playButton.addEventListener('click', startGame);
+        cashoutButton.addEventListener('click', cashout);
+        
+        // Mode selection
+        document.querySelectorAll('.mode-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.mode-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Multiplier selection
+        document.querySelectorAll('.multiplier-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.multiplier-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                gameState.mines = parseInt(this.textContent.replace('×', ''));
+                document.querySelector('.mines-value').textContent = gameState.mines;
+            });
+        });
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            localStorage.removeItem('balance');
+            window.location.href = '../../auth/login.html';
+        });
+        
+        // Initialize on load
+        window.addEventListener('load', function() {
+            // Force load from localStorage in case of tab sync
+            const savedBalance = parseFloat(localStorage.getItem('balance')) || 10000.00;
+            updateBalance(savedBalance);
+        });
+    </script>
+</body>
+</html>

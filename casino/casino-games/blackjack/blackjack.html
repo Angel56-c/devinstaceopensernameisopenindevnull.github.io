@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funds.co</title>
+    <link rel="icon" type="image/png" href="iconB.png">
+    <link rel="stylesheet" href="style.css">
+        <title>Funds.co</title>
+        <style>
+            /* Minimal CSS just for the top UI */
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+            header {
+                background: #1a1a1a;
+                color: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 5%;
+            }
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+            }
+            nav ul {
+                display: flex;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            nav li {
+                margin: 0 15px;
+            }
+            nav a {
+                color: white;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+            }
+            nav a i {
+                margin-right: 8px;
+            }
+            .auth-buttons {
+                display: flex;
+                gap: 10px;
+            }
+            .auth-btn {
+                background: #7e57ff;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            #userPanel {
+                display: none;
+                align-items: center;
+                gap: 15px;
+            }
+            #addFundsBtn {
+                background: #f8d347;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <header>
+            <div class="logo">Funds.co</div>
+            <nav>
+                <ul>
+                    <li><a href="../../../casino/casino.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="../../../index.html"><i class="fas fa-home"></i> Leave Casino</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button id="loginBtn" class="auth-btn">Login</button>
+                <button id="registerBtn" class="auth-btn">Register</button>
+                <div id="userPanel">
+                    <span id="usernameDisplay"></span>
+                    <span id="balanceDisplay">$50,000</span>
+                    <button id="addFundsBtn">
+                        <i class="fas fa-plus"></i> Add Funds
+                    </button>
+                </div>
+            </div>
+        </header>
+</head>
+<body>
+    <div class="container">
+        <h1>♠️ Blackjack ♣️</h1>
+
+        <div id="game-area">
+            <div class="dealer-area">
+                <h2>Dealer: <span id="dealer-score">?</span></h2>
+                <div id="dealer-cards" class="cards"></div>
+            </div>
+
+            <div class="player-area">
+                <h2>You: <span id="player-score">0</span></h2>
+                <div id="player-cards" class="cards"></div>
+            </div>
+
+            <div id="actions" class="actions">
+                <button id="hit-btn">Hit</button>
+                <button id="stand-btn">Stand</button>
+                <button id="new-game-btn">New Game</button>
+            </div>
+
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

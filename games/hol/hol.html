@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funds.co</title>
+    <link rel="icon" type="image/png" href="iconHOL.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #121218;
+            --secondary: #1a1a23;
+            --accent-purple: #7e57ff;
+            --accent-blue: #3a7bd5;
+            --text: #ffffff;
+            --text-secondary: #b8b8c8;
+            --success: #00e676;
+            --danger: #ff3d71;
+            --warning: #ffaa00;
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        body {
+            background-color: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--secondary);
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin: 0 10px;
+        }
+        
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        nav ul li a.active {
+            background-color: var(--accent);
+        }
+        
+        nav ul li a i {
+            margin-right: 8px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+        }
+        
+        .auth-btn {
+            background-color: transparent;
+            color: var(--text);
+            border: 1px solid var(--text);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        #userPanel {
+            display: flex;
+            align-items: center;
+        }
+        
+        #usernameDisplay {
+            margin-right: 15px;
+        }
+        
+        #balanceDisplay {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 6px 12px;
+            border-radius: var(--border-radius);
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        #addFundsBtn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        #addFundsBtn i {
+            margin-right: 6px;
+        }
+        
+        /* Game Container */
+        .game-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .game-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text);
+            text-align: center;
+        }
+        
+        .game-content {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+        }
+        
+        .game-board {
+            flex: 2;
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-sidebar {
+            flex: 1;
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .balance-container {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .balance-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .balance-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* Number Display */
+        .number-display {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .current-number {
+            font-size: 4rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        /* Bet Controls */
+        .bet-controls {
+            margin: 20px 0;
+        }
+        
+        .bet-amount-container {
+            margin-bottom: 20px;
+        }
+        
+        .bet-amount-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .bet-amount-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        /* Prediction Buttons */
+        .prediction-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .prediction-btn {
+            padding: 15px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .prediction-btn i {
+            margin-right: 8px;
+        }
+        
+        .higher-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .higher-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .lower-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .lower-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Result Message */
+        .result-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .result-message.win {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            display: block;
+        }
+        
+        .result-message.lose {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            display: block;
+        }
+        
+        /* History */
+        .history-title {
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .history-list {
+            list-style: none;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-number {
+            font-weight: bold;
+        }
+        
+        .history-result {
+            font-weight: bold;
+        }
+        
+        .history-win {
+            color: var(--success);
+        }
+        
+        .history-lose {
+            color: var(--danger);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-content {
+                flex-direction: column;
+            }
+            
+            .prediction-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            padding: 15px;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Funds.co</div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="../sportsbook.html"><i class="fas fa-trophy"></i> Sports</a></li>
+                <li><a href="../../casino/casino.html"><i class="fas fa-coins"></i> Casino</a></li>
+                <li><a href="../crash/crash.html"><i class="fas fa-rocket"></i> Crash</a></li>
+                <li><a href="../mines/mines.html"><i class="fas fa-bomb"></i> Mines</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button id="loginBtn" class="auth-btn">Login</button>
+            <button id="registerBtn" class="auth-btn">Register</button>
+            <div id="userPanel" style="display:none;">
+                <span id="usernameDisplay"></span>
+                <span id="balanceDisplay">$50,000</span>
+                <button id="addFundsBtn">
+                    <i class="fas fa-plus"></i> Add Funds
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <h1 class="game-title">High or Low</h1>
+        
+        <div class="game-content">
+            <div class="game-board">
+                <div class="balance-container">
+                    <div class="balance-label">Your Balance</div>
+                    <div class="balance-amount" id="balance">$1,000</div>
+                </div>
+                
+                <div class="number-display">
+                    <div class="current-number" id="current-number">-</div>
+                </div>
+                
+                <div class="bet-controls">
+                    <div class="bet-amount-container">
+                        <label class="bet-amount-label">Bet Amount</label>
+                        <input type="number" id="bet-amount" class="bet-amount-input" placeholder="Enter amount" min="1" value="10">
+                    </div>
+                    
+                    <div class="prediction-buttons">
+                        <button class="prediction-btn higher-btn" id="higher-btn">
+                            <i class="fas fa-arrow-up"></i> Higher
+                        </button>
+                        <button class="prediction-btn lower-btn" id="lower-btn">
+                            <i class="fas fa-arrow-down"></i> Lower
+                        </button>
+                    </div>
+                    
+                    <div class="result-message" id="result-message"></div>
+                </div>
+            </div>
+            
+            <div class="game-sidebar">
+                <h3 class="history-title">Game History</h3>
+                <ul class="history-list" id="history-list">
+                    <!-- History items will be added here dynamically -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>⚠️ This is a demo site only. No real money is used or won. | THIS PROJECT IS STILL IN ALPHA TESTING</p>
+    </footer>
+
+    <script>
+        // Game state
+        const gameState = {
+            balance: parseFloat(localStorage.getItem('playerBalance')) || 50000.00,
+            currentNumber: null,
+            nextNumber: null,
+            betAmount: 0,
+            gameActive: false,
+            history: []
+        };
+
+        // DOM elements
+        const balanceElement = document.getElementById('balance');
+        const currentNumberElement = document.getElementById('current-number');
+        const betAmountInput = document.getElementById('bet-amount');
+        const higherButton = document.getElementById('higher-btn');
+        const lowerButton = document.getElementById('lower-btn');
+        const resultMessage = document.getElementById('result-message');
+        const historyList = document.getElementById('history-list');
+        const headerBalanceDisplay = document.getElementById('balanceDisplay');
+
+        // Format currency
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        // Update balance in both game and header
+        function updateBalance() {
+            // Update game display
+            balanceElement.textContent = formatCurrency(gameState.balance);
+            // Update header display
+            headerBalanceDisplay.textContent = formatCurrency(gameState.balance);
+            // Save to localStorage
+            localStorage.setItem('playerBalance', gameState.balance);
+        }
+
+        // Initialize game
+        function initGame() {
+            gameState.currentNumber = generateRandomNumber();
+            currentNumberElement.textContent = gameState.currentNumber;
+            updateBalance();
+            gameState.gameActive = true;
+            
+            // Reset UI
+            resultMessage.textContent = '';
+            resultMessage.className = 'result-message';
+            resultMessage.style.display = 'none';
+            higherButton.disabled = false;
+            lowerButton.disabled = false;
+        }
+
+        // Generate random number between 1 and 100
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 100) + 1;
+        }
+
+        // Add to history
+        function addToHistory(number, prediction, result, amount) {
+            const historyItem = {
+                number,
+                prediction,
+                result,
+                amount
+            };
+            
+            gameState.history.unshift(historyItem);
+            
+            // Keep only last 10 items
+            if (gameState.history.length > 10) {
+                gameState.history.pop();
+            }
+            
+            updateHistoryDisplay();
+        }
+
+        // Update history display
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+            
+            gameState.history.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                
+                const numberSpan = document.createElement('span');
+                numberSpan.className = 'history-number';
+                numberSpan.textContent = item.number;
+                
+                const predictionSpan = document.createElement('span');
+                predictionSpan.textContent = item.prediction === 'higher' ? 'Higher' : 'Lower';
+                
+                const resultSpan = document.createElement('span');
+                resultSpan.className = `history-result history-${item.result}`;
+                resultSpan.textContent = item.result === 'win' 
+                    ? `+${formatCurrency(item.amount)}` 
+                    : `-${formatCurrency(item.amount)}`;
+                
+                li.appendChild(numberSpan);
+                li.appendChild(predictionSpan);
+                li.appendChild(resultSpan);
+                
+                historyList.appendChild(li);
+            });
+        }
+
+        // Handle bet placement
+        function placeBet(prediction) {
+            const betAmount = parseFloat(betAmountInput.value);
+            
+            // Validate bet
+            if (isNaN(betAmount)) {
+                resultMessage.textContent = 'Please enter a valid bet amount';
+                resultMessage.className = 'result-message lose';
+                resultMessage.style.display = 'block';
+                return;
+            }
+            
+            if (betAmount < 1) {
+                resultMessage.textContent = 'Minimum bet is $1';
+                resultMessage.className = 'result-message lose';
+                resultMessage.style.display = 'block';
+                return;
+            }
+            
+            if (betAmount > gameState.balance) {
+                resultMessage.textContent = 'You don\'t have enough balance';
+                resultMessage.className = 'result-message lose';
+                resultMessage.style.display = 'block';
+                return;
+            }
+            
+            gameState.betAmount = betAmount;
+            gameState.nextNumber = generateRandomNumber();
+            
+            // Disable buttons during evaluation
+            higherButton.disabled = true;
+            lowerButton.disabled = true;
+            
+            // Show "thinking" animation
+            currentNumberElement.textContent = '...';
+            currentNumberElement.classList.add('pulse');
+            
+            // Simulate delay for suspense
+            setTimeout(() => {
+                evaluateBet(prediction);
+            }, 1000);
+        }
+
+        // Evaluate the bet (1:1 payout)
+        function evaluateBet(prediction) {
+            currentNumberElement.classList.remove('pulse');
+            currentNumberElement.textContent = gameState.nextNumber;
+            
+            const isHigher = gameState.nextNumber > gameState.currentNumber;
+            const isLower = gameState.nextNumber < gameState.currentNumber;
+            const isSame = gameState.nextNumber === gameState.currentNumber;
+            
+            let won = false;
+            let resultText = '';
+            let winnings = 0;
+            
+            if (isSame) {
+                resultText = 'Same number! Bet returned.';
+                gameState.balance += gameState.betAmount; // Return bet
+                addToHistory(gameState.nextNumber, prediction, 'win', 0);
+            } else if ((prediction === 'higher' && isHigher) || (prediction === 'lower' && isLower)) {
+                winnings = gameState.betAmount; // 1:1 payout
+                gameState.balance += winnings;
+                resultText = `You won ${formatCurrency(winnings)}!`;
+                resultMessage.className = 'result-message win';
+                won = true;
+                addToHistory(gameState.nextNumber, prediction, 'win', winnings);
+            } else {
+                gameState.balance -= gameState.betAmount;
+                resultText = `You lost ${formatCurrency(gameState.betAmount)}!`;
+                resultMessage.className = 'result-message lose';
+                addToHistory(gameState.nextNumber, prediction, 'lose', gameState.betAmount);
+            }
+            
+            resultMessage.textContent = resultText;
+            resultMessage.style.display = 'block';
+            updateBalance();
+            gameState.gameActive = false;
+            
+            // Check if player is broke
+            if (gameState.balance <= 0) {
+                setTimeout(() => {
+                    if (confirm('You\'re out of money! Start over with $50,000?')) {
+                        gameState.balance = 50000.00;
+                        updateBalance();
+                        initGame();
+                    }
+                }, 500);
+            } else {
+                // Auto start new round after 2 seconds
+                setTimeout(() => {
+                    gameState.currentNumber = gameState.nextNumber;
+                    initGame();
+                }, 2000);
+            }
+        }
+
+        // Event listeners
+        higherButton.addEventListener('click', () => {
+            if (gameState.gameActive) {
+                placeBet('higher');
+            }
+        });
+
+        lowerButton.addEventListener('click', () => {
+            if (gameState.gameActive) {
+                placeBet('lower');
+            }
+        });
+
+        // Initialize the game when page loads
+        window.addEventListener('load', () => {
+            // Initialize header balance display
+            headerBalanceDisplay.textContent = formatCurrency(gameState.balance);
+            
+            initGame();
+            
+            // Add some sample history items
+            addToHistory(72, 'higher', 'win', 100);
+            addToHistory(45, 'lower', 'lose', 100);
+            addToHistory(88, 'higher', 'win', 100);
+        });
+        
+        
+    </script>
+</body>
+</html>
